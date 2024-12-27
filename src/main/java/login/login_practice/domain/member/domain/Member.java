@@ -4,15 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jdk.jfr.Timestamp;
 import login.login_practice.domain.member.presentation.dto.MemberDto;
 import lombok.Getter;
-import lombok.Setter;
-import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.util.Date;
 
 @Getter
-@Setter
 @Entity(name = "Member")
 @Table(name = "member")
 public class Member {
@@ -33,13 +32,33 @@ public class Member {
     @Column(nullable = false)
     private String department;
 
-    @Column
+    @Column(nullable = false, updatable = false)
     private String role;
 
-    @Column
+    @Timestamp
     private Date created_date;
 
-    public static Member of(MemberDto memberDto) {
-        return new ModelMapper().map(memberDto, Member.class);
+    private Member(String studentNo, String name, String password, String major, String department, String role) {
+        this.student_no = studentNo;
+        this.name = name;
+        this.password = password;
+        this.major = major;
+        this.department = department;
+        this.role = role;
+    }
+
+    public Member() {
+
+    }
+
+    public static Member of(MemberDto memberDto, BCryptPasswordEncoder bCryptPasswordEncoder) {
+        return new Member(
+                memberDto.getStudent_no(),
+                memberDto.getName(),
+                bCryptPasswordEncoder.encode(memberDto.getPassword()),
+                memberDto.getMajor(),
+                memberDto.getDepartment(),
+                memberDto.getRole()
+        );
     }
 }

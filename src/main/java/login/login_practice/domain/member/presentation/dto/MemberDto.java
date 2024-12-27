@@ -23,4 +23,7 @@ public class MemberDto {
     @Schema(description = "단과대", example = "소경대")
     private String department;
 
+    @Schema(description = "권한", example = "ROLE_ADMIN")
+    private String role;
+
 }

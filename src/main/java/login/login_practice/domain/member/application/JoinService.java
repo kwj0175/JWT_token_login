@@ -18,16 +18,13 @@ public class JoinService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public String join(MemberDto memberDto) {
-        Member member = Member.of(memberDto);
+        Member member = Member.of(memberDto, bCryptPasswordEncoder);
 
         Optional<Member> optional = memberRepository.findById(member.getStudent_no());
 
         if (optional.isPresent()) {
             return "Exist!!";
         }
-
-        member.setRole("ROLE_ADMIN");
-        member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
 
         memberRepository.save(member);
 

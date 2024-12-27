@@ -5,10 +5,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import login.login_practice.domain.member.application.JoinService;
 import login.login_practice.domain.member.presentation.dto.MemberDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@ResponseBody
 @RequiredArgsConstructor
 @Tag(name = "Join", description = "가입")
 @RequestMapping("/")
@@ -18,12 +18,12 @@ public class JoinController {
 
     @PostMapping("/join")
     @Operation(summary = "[U] 회원가입", description = "회원 생성")
-    public String join(
+    public ResponseEntity<?> join(
             @RequestBody MemberDto memberDto
     ) {
         String id = joinService.join(memberDto);
 
-        return "ok " + id;
+        return ResponseEntity.ok().body(id);
     }
 
 }

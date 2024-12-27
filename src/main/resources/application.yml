@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: login_practice
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/login_practice
+    username: root
+    password: mysql
+
+  security:
+    user:
+      name: root
+      password: root
+
+  jpa:
+    database: mysql
+    show-sql: true
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+  jwt:
+    secret: adosifjodsijfoisdfdlkflknwelelrnoicvnozcvsncvnclxnkvidsofjpodjfp

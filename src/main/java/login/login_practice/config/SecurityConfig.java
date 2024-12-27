@@ -1,6 +1,6 @@
 package login.login_practice.config;
 
-import login.login_practice.jwt.JWTUtil;
+import login.login_practice.jwt.JWTCreator;
 import login.login_practice.jwt.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -21,7 +21,7 @@ public class SecurityConfig {
 
     private final AuthenticationConfiguration authenticationConfiguration;
 
-    private final JWTUtil jwtUtil;
+    private final JWTCreator jwtCreator;
 
 
     @Bean
@@ -41,6 +41,8 @@ public class SecurityConfig {
         http.formLogin((auth) -> auth.disable());
         http.httpBasic((auth) -> auth.disable());
 
+        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtCreator), UsernamePasswordAuthenticationFilter.class);
+
         http.authorizeHttpRequests((auth) -> auth
                 .requestMatchers("/login",
                                  "/",
@@ -53,8 +55,6 @@ public class SecurityConfig {
 
         http.sessionManagement((session) -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-
-        http.addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
